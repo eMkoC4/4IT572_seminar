@@ -17,6 +17,7 @@
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
         security_token: "{{ session_token }}"
+        tags: eshop
       register: ec2
 
     - name: Add instance host to group
@@ -72,3 +73,23 @@
     - wait_for:
         port:
           80
+
+- name: Terminate old EC2 instance
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+  - name: Gather info about previous intance
+    ec2_instance_info:
+      region: "{{ region }}"
+      filters:
+        "tag:Name": eshop
+    register: ec2_eshop
+
+  - name: Kill EC2 Instance
+    ec2:
+      instance_ids: "{{ ec2_eshop.instances[0].instance_id }}"
+      state: absent
+      region: "{{ region }}"
+        
