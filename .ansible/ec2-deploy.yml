@@ -17,7 +17,8 @@
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
         security_token: "{{ session_token }}"
-        tags: eshop
+        instance_tags:
+          Name: eshop
       register: ec2
 
     - name: Add instance host to group
@@ -82,14 +83,20 @@
   tasks:
   - name: Gather info about previous intance
     ec2_instance_info:
-      region: "{{ region }}"
+      region: us-east-1
       filters:
-        "tag:Name": eshop
+        "tag:Name": "eshop"
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
+      security_token: "{{ session_token }}"
     register: ec2_eshop
 
-  - name: Kill EC2 Instance
+  - name: Terminate the old EC2 instance
     ec2:
       instance_ids: "{{ ec2_eshop.instances[0].instance_id }}"
       state: absent
-      region: "{{ region }}"
+      region: us-east-1
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
+      security_token: "{{ session_token }}"
         
