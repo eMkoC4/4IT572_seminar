@@ -5,85 +5,85 @@ on:
   push: 
 
 jobs:
-  # Install: 
-  #   runs-on: ubuntu-latest
+  Install: 
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Code checkout
-  #       uses: actions/checkout@v2.5.0
-  #       with:
-  #         token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2.5.0
+        with:
+          token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
 
-  #     - name: Setup NodeJS
-  #       uses: actions/setup-node@v3.5.1
-  #       with:
-  #         node-version: 10
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 10
 
-  #     - name: Cache node modules
-  #       uses: actions/cache@v3.0.11
-  #       with:
-  #         path: node_modules
-  #         key: node_modules-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: node_modules-
+      - name: Cache node modules
+        uses: actions/cache@v3.0.11
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: node_modules-
 
-  #     - name: Install packages with npm
-  #       run: |
-  #         npm ci
+      - name: Install packages with npm
+        run: |
+          npm ci
 
-  # Build:
-  #   needs: Install
-  #   runs-on: ubuntu-latest
+  Build:
+    needs: Install
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Code checkout
-  #       uses: actions/checkout@v2.5.0
-  #       with:
-  #         token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2.5.0
+        with:
+          token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
 
-  #     - name: Setup NodeJS
-  #       uses: actions/setup-node@v3.5.1
-  #       with:
-  #         node-version: 10
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 10
 
-  #     - name: Cache node modules
-  #       uses: actions/cache@v3.0.11
-  #       with:
-  #         path: node_modules
-  #         key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Cache node modules
+        uses: actions/cache@v3.0.11
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-  #     - name: Build
-  #       run: |
-  #         npm rebuild node-saas --force
-  #         npm run build -- --colors
+      - name: Build
+        run: |
+          npm rebuild node-saas --force
+          npm run build -- --colors
 
-  # Test:
-  #   needs: Install
-  #   runs-on: ubuntu-latest
+  Test:
+    needs: Install
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Code checkout
-  #       uses: actions/checkout@v2.5.0
-  #       with:
-  #         token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2.5.0
+        with:
+          token: ${{ secrets.SEMINAR_WORKFLOW_TOKEN }}
 
-  #     - name: Setup NodeJS
-  #       uses: actions/setup-node@v3.5.1
-  #       with:
-  #         node-version: 10
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: 10
 
-  #     - name: Cache node modules
-  #       uses: actions/cache@v3.0.11
-  #       with:
-  #         path: node_modules
-  #         key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Cache node modules
+        uses: actions/cache@v3.0.11
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-  #     - name: Run tests
-  #       run: |
-  #         npm run test -- --colors
+      - name: Run tests
+        run: |
+          npm run test -- --colors
 
   Deploy:
-    # needs: [Build, Test]
-    if: ${{ github.ref == 'refs/heads/deploy-aws' }}
+    needs: [Build, Test]
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -110,6 +110,6 @@ jobs:
           script: |
             cd ~/4IT572_seminar/.ansible
             echo ${{ secrets.KEYFILE_VAULT_PASS }} > key.txt 
-            ANSIBLE_HOST_KEY_CHECKING=False ~/.local/bin/ansible-playbook ec2-deploy.yml --vault-password-file key.txt --user ec2-user --key-file ~/4IT572_seminar_ansible/seminar.pem --diff
+            ANSIBLE_HOST_KEY_CHECKING=False ~/.local/bin/ansible-playbook ec2-deploy.yml --vault-password-file key.txt --user ec2-user --key-file ~/4IT572_seminar/.ansible/seminar.pem --diff
 
 
