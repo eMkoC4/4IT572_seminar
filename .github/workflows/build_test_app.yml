@@ -107,5 +107,9 @@ jobs:
           host: ec2-52-87-158-228.compute-1.amazonaws.com
           username: ec2-user
           key : ${{ secrets.PEM_KEY }}
-          script: whoami
+          script: |
+            cd ~/4IT572_seminar/.ansible
+            echo ${{ secrets.KEYFILE_VAULT_PASS }} > key.txt 
+            ansible-playbook ec2-deploy.yml --vault-password-file key.txt --user ec2-user --key-file ~/4IT572_seminar_ansible/seminar.pem --diff
+
 
