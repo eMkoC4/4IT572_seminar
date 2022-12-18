@@ -1,4 +1,4 @@
-name: Build and test seminar app
+name: Build, test and deploy seminar app
 
 on:
   workflow_dispatch:
@@ -80,3 +80,33 @@ jobs:
       - name: Run tests
         run: |
           npm run test -- --colors
+
+  Deploy:
+    needs: [Build, Test]
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2.5.0
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+
+      - name: Load Node modules and build folder
+        uses: actions/cache@v3.0.11
+        with:
+          path: |
+            ~/.npm
+            ./node_modules
+            ./build
+          key: ${{ runner.os }}-build-${{ github.run_id }}
+
+      - name: Deploy to EC2 with ansible
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: 'ec2-deploy.yml'
+          directory: ./
+          key: ${{secrets.PEM_KEY}}
+          vault_password: ${{ secrets.KEYFILE_VAULT_PASS }}
+          known_hosts: ec2-user@ec2-52-91-226-154.compute-1.amazonaws.com
+
