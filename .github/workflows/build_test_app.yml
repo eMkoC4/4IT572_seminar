@@ -104,12 +104,13 @@ jobs:
       - name: SSH connect to server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ec2-52-87-158-228.compute-1.amazonaws.com
+          host: ec2-54-196-53-99.compute-1.amazonaws.com
           username: ec2-user
           key : ${{ secrets.PEM_KEY }}
           script: |
             cd ~/4IT572_seminar/.ansible
             echo ${{ secrets.KEYFILE_VAULT_PASS }} > vault_key.txt 
             ANSIBLE_HOST_KEY_CHECKING=False ~/.local/bin/ansible-playbook ec2-deploy.yml --vault-password-file vault_key.txt --user ec2-user --key-file ~/4IT572_seminar/.ansible/seminar.pem --diff
+            rm vault_key.txt
 
 
