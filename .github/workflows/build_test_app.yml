@@ -100,13 +100,12 @@ jobs:
             ./node_modules
             ./build
           key: ${{ runner.os }}-build-${{ github.run_id }}
-          
+
       - name: Deploy to EC2 with ansible
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: 'ec2-deploy.yml'
-          directory: ../../.ansible/
-          key: ${{secrets.PEM_KEY}}
+          directory: .ansible/
+          key: ${{ secrets.PEM_KEY }}
           vault_password: ${{ secrets.KEYFILE_VAULT_PASS }}
-          known_hosts: ec2-user@ec2-52-91-226-154.compute-1.amazonaws.com
 
