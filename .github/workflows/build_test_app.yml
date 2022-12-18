@@ -83,7 +83,7 @@ jobs:
 
   Deploy:
     needs: [Build, Test]
-    if: ${{ github.ref == 'refs/heads/master' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -105,8 +105,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v2
         with:
           playbook: 'ec2-deploy.yml'
-          directory: ../../.ansible/
-          key: ${{secrets.PEM_KEY}}
+          directory: .ansible/
+          key: ${{ secrets.PEM_KEY }}
           vault_password: ${{ secrets.KEYFILE_VAULT_PASS }}
-          known_hosts: ec2-user@ec2-52-91-226-154.compute-1.amazonaws.com
 
