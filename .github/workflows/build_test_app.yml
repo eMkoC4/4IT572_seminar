@@ -110,6 +110,6 @@ jobs:
           script: |
             cd ~/4IT572_seminar/.ansible
             echo ${{ secrets.KEYFILE_VAULT_PASS }} > key.txt 
-            ansible-playbook ec2-deploy.yml --vault-password-file key.txt --user ec2-user --key-file ~/4IT572_seminar_ansible/seminar.pem --diff
+            ~/.local/bin/ansible-playbook ec2-deploy.yml --vault-password-file key.txt --user ec2-user --key-file ~/4IT572_seminar_ansible/seminar.pem --diff
 
 
