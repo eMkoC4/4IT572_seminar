@@ -104,7 +104,7 @@ jobs:
       - name: SSH connect to server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ec2-54-196-53-99.compute-1.amazonaws.com
+          host: ec2-3-88-252-213.compute-1.amazonaws.com
           username: ec2-user
           key : ${{ secrets.PEM_KEY }}
           script: |
