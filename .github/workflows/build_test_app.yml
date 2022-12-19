@@ -111,6 +111,5 @@ jobs:
             cd ~/4IT572_seminar/.ansible
             echo ${{ secrets.KEYFILE_VAULT_PASS }} > vault_key.txt 
             ANSIBLE_HOST_KEY_CHECKING=False ~/.local/bin/ansible-playbook ec2-deploy.yml --vault-password-file vault_key.txt --user ec2-user --key-file ~/4IT572_seminar/.ansible/seminar.pem --diff
-            rm vault_key.txt
 
 
