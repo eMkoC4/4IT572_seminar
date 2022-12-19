@@ -107,7 +107,7 @@
     set_fact:
       ec2_instances: |
         {% set instances = [] %}
-        {% for item in groups['to_terminate'] if item != {{ ec2.instances[0].instance_id }} -%}
+        {% for item in groups['to_terminate'] if item != ec2.instances[0].instance_id -%}
           {{ instances.append(item) }}
         {%- endfor %}
         {{ instances }}
